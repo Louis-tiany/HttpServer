@@ -1,1 +1,0 @@
-/usr/bin/c++  -g -DCHECK_PTHREAD_RETURN_VALUE -D_FILE_OFFSET_BITS=64 -Wall -Wextra -Werror -Wconversion -Wno-unused-parameter -Woverloaded-virtual -Wpointer-arith -Wwrite-strings -march=native -std=c++11 -rdynamic -march=native -Wall -Wextra -Werror -pthread -O2 -DNDEBUG  -rdynamic CMakeFiles/serialize.dir/serialize/serialize.cpp.o  -o ../../../bin/serialize 
