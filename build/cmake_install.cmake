@@ -42,6 +42,7 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   include("/home/louis/code/project/HttpServer/build/muduo/base/cmake_install.cmake")
   include("/home/louis/code/project/HttpServer/build/muduo/net/cmake_install.cmake")
   include("/home/louis/code/project/HttpServer/build/http/cmake_install.cmake")
+  include("/home/louis/code/project/HttpServer/build/thirdparty/cmake_install.cmake")
 
 endif()
 

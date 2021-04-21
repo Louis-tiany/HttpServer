@@ -23,10 +23,8 @@ set(CXX_FLAGS
  -Werror
  -Wconversion
  -Wno-unused-parameter
- -Wold-style-cast
  -Woverloaded-virtual
  -Wpointer-arith
- -Wshadow
  -Wwrite-strings
  -march=native
  # -MMD
@@ -106,6 +104,7 @@ message(STATUS "CXX_FLAGS = " ${CMAKE_CXX_FLAGS} " " ${CMAKE_CXX_FLAGS_${BUILD_T
 add_subdirectory(muduo/base)
 add_subdirectory(muduo/net)
 add_subdirectory(http)
+add_subdirectory(thirdparty)
 #if(MUDUO_BUILD_EXAMPLES)
 #  add_subdirectory(contrib)
 #  add_subdirectory(examples)

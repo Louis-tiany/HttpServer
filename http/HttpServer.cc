@@ -109,6 +109,7 @@ void HttpServer::onRequest(const TcpConnectionPtr& conn, const HttpRequest& req)
   if (response.closeConnection())
   {
     conn->shutdown();
+    LOG_INFO << "conn shutdown";
   }
 }
 

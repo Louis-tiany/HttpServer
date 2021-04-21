@@ -7,3 +7,4 @@
 subdirs("muduo/base")
 subdirs("muduo/net")
 subdirs("http")
+subdirs("thirdparty")
