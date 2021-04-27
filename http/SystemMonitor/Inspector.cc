@@ -35,6 +35,9 @@ Inspector* g_globalInspector = 0;
 static CpuInfo lastCpuInfo;
 static CpuInfo nowCpuInfo;
 
+static NetInfo lastNetInfo;
+static NetInfo nowNetInfo;
+
 // Looks buggy
 std::vector<string> split(const string& str)
 {
@@ -81,12 +84,13 @@ Inspector::Inspector(EventLoop* loop,
   performanceInspector_->registerCommands(this);
 #endif
   loop->runAfter(0, std::bind(&Inspector::start, this)); // little race condition
-  loop->runEvery(1, std::bind(&Inspector::CPUINFO, this));
+  loop->runEvery(1, std::bind(&Inspector::tick, this));
   loop->runEvery(1, std::bind(&Inspector::getMemDiskInfo, this));
 }
 
-void Inspector::CPUINFO() {
+void Inspector::tick() {
     getCpuInfo();
+    NetInfo();
 }
 
 std::string Inspector::getMemDiskInfo() {
@@ -111,6 +115,14 @@ std::string Inspector::getMemDiskInfo() {
     diskObj.AddMember("total_disk", diskinfo_.total, allocator);
     diskObj.AddMember("disk_used_rate", diskinfo_.usedRate, allocator);
     document.AddMember("disk", diskObj, allocator);
+
+    rapidjson::Value netobj(rapidjson::kObjectType);
+    long BytesRXSecond = (nowNetInfo.BytesRXTotal - lastNetInfo.BytesRXTotal);
+    long BytesTXSecond = (nowNetInfo.BytesTXTotal - lastNetInfo.BytesTXTotal);
+    netobj.AddMember("BytesRXSecond", BytesRXSecond, allocator);
+    netobj.AddMember("BytesTXSecond", BytesTXSecond, allocator);
+    document.AddMember("net", netobj, allocator);
+
 
     rapidjson::StringBuffer buffer;
     rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
@@ -137,6 +149,11 @@ void Inspector::getCpuInfo() {
                 &nowCpuInfo.user, &nowCpuInfo.nice, &nowCpuInfo.system,
                 &nowCpuInfo.idle, &nowCpuInfo.iowait, &nowCpuInfo.irq, &nowCpuInfo.softirq);
     fclose(fd);   
+}
+
+void Inspector::NetInfo() {
+    lastNetInfo = nowNetInfo;
+    nowNetInfo = getNetInfo();
 }
 
 

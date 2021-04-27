@@ -12,6 +12,7 @@
 #include <cstdio>
 #include <string.h>
 #include <string>
+#include <sys/statvfs.h>
 
 struct CpuInfo {
     char names[32];
@@ -42,5 +43,12 @@ struct DiskInfo {
 
 DiskInfo getDiskInfo();
 
+struct NetInfo {
+    long long BytesRXTotal;
+    long long BytesTXTotal;
+    long long BytesTotal;
+};
+
+NetInfo getNetInfo();
 
 #endif

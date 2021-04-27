@@ -67,7 +67,8 @@ class Inspector : noncopyable
   static void getCpuInfo();
   static double calculateCpuRate();
  private:
-  void CPUINFO();
+  void tick();
+  void NetInfo();
   void MEMINFO();
   void DISKINFO();
   std::string getMemDiskInfo();

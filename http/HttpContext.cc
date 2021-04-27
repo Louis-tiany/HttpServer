@@ -1,5 +1,6 @@
 #include "muduo/net/Buffer.h"
 #include "http/HttpContext.h"
+#include "muduo/base/Logging.h"
 
 #include <iostream>
 
@@ -69,8 +70,7 @@ bool HttpContext::parseBody(Buffer* buf)
 {
 	bool ok = true;
 	bool hasMore = true;
-	//std::cout << "this body" << std::endl;
-	//bodystate_ = kBodyRequestLine;
+    //LOG_INFO << buf->peek();
 	while (hasMore)
 	{
 		if (bodystate_ == kBodyRequestLine) {
@@ -82,7 +82,6 @@ bool HttpContext::parseBody(Buffer* buf)
 				 if("multipart/form-data" == oldContentType.substr(0,position)) {
 					auto p_ = oldContentType.find("=");
 					if(p_ != oldContentType.npos) {
-						//std::cout << oldContentType.substr(p_+1) << std::endl;
 						boundary_ = "--"+oldContentType.substr(p_+1);
 					}
 				 }
@@ -131,25 +130,20 @@ bool HttpContext::parseBody(Buffer* buf)
 				if(position != s.npos) {
 					filename_ = s.substr(position+10);
 					filename_.pop_back();
-
 				}
 			}
 			bodystate_=kBodyContinue;
-			
 		} 
 		else if(bodystate_ == kBodyContinue) {
-			//std::cout << "this kBodyContinue" << std::endl;
 			string path = "fileStorage/"+std::to_string(pthread_self())+filename_;
 			int fd = open(path.c_str(), O_RDWR | O_CREAT | O_APPEND, 0666);
 			size_t readableBytes = buf->readableBytes();
 			string tail(buf->peek()+readableBytes-4-boundary_.size(), buf->peek()+readableBytes-2);
 			if(tail == string(boundary_+"--")) {
 				bodystate_ = kBodyRequestLine;
-				std::cout << "tail:" << tail << std::endl;
+                LOG_INFO << tail;
 				readableBytes=readableBytes-4-boundary_.size();
 			}
-			//std::cout << "buf->readableBytes()" << buf->readableBytes() << std::endl;
-			//std::cout << "buf->writableBytes()" << buf->writableBytes() << std::endl;
 			size_t len = write(fd, buf->peek(), readableBytes);
 			if(len != readableBytes) {
 				std::cout << "write error!" << std::endl;

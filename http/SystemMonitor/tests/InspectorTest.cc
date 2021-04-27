@@ -18,7 +18,7 @@ int main()
 {
   EventLoop loop;
   EventLoopThread t;
-  Inspector ins(t.startLoop(), InetAddress(8888), "test");
+  Inspector ins(t.startLoop(), InetAddress(8888), "louis");
   loop.loop();
 }
 

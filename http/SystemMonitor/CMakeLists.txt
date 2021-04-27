@@ -21,6 +21,6 @@ set(HEADERS
 install(FILES ${HEADERS} DESTINATION include/muduo/net/inspect)
 
 if(MUDUO_BUILD_EXAMPLES)
-add_executable(inspector_test tests/InspectorTest.cc)
-target_link_libraries(inspector_test muduo_inspect)
+add_executable(inspector tests/InspectorTest.cc)
+target_link_libraries(inspector muduo_inspect)
 endif()
